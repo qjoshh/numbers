@@ -1,0 +1,1248 @@
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Theme color for mobile address bar and browser UI -->
+    <meta name="theme-color" content="#24a186" />
+
+    <title>Massive Number Scale Visualizer | Biobizarre</title>
+    <meta name="description"
+        content="Visualize and compare the largest numbers in the universe—from Googol to TREE(3)—with our interactive scale chart designed for Biobizarre." />
+    <meta name="keywords"
+        content="massive numbers, number visualization, TREE(3), googolplex visual, scale of large numbers, Biobizarre facts, weird math" />
+    <meta name="author" content="Biobizarre Team" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Massive Number Scale Visualizer" />
+    <meta property="og:description"
+        content="Explore the weirdest and biggest numbers ever imagined—from Centillion to TREE(3)—in this wild interactive graphic." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://biobizarre.blogspot.com/p/massive-number-visualizer.html" />
+    <meta property="og:image" content="https://yourdomain.com/path-to-thumbnail.jpg" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Massive Number Scale Visualizer" />
+    <meta name="twitter:description"
+        content="From proton decay to googolplexes—this is what huge numbers *really* look like. Only on Biobizarre." />
+    <meta name="twitter:image" content="https://yourdomain.com/path-to-thumbnail.jpg" />
+
+    <!-- Favicon (Optional) -->
+    <link rel="icon" type="image/jpg" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi1ewjrLdjqsX0WQacmD24Cu-fPAYQX5tlh4g0cJAn6I-Nb1TZCls_YkrJcYMLVqjRpRJATALZeZasj8PSmG5sRfvCbaX4LXuh7eVyaFu110UHqgVcuxoCmC0D82lUb4p8Ns0m1kXdtgqe9rdXTPLSVvk3clEV8VPp9SkGigbX3awAA_Y1Vfw3GBGz77WZz/s16000/BioBzarre.jpg" />
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .input-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* styles after the input[type="text"] styles */
+        .input-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            margin-top: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000 !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: none;
+        }
+
+        .suggestions-dropdown.show {
+            display: block;
+            animation: fadeInDown 0.3s ease;
+        }
+
+        .suggestion-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item.highlighted {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateX(5px);
+        }
+
+        .suggestion-name {
+            color: #333;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .suggestion-preview {
+            color: #666;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .suggestion-match {
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .example-btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .example-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .result-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 400px;
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .number-display {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .number-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .number-value {
+            font-size: 1.2rem;
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            word-break: break-all;
+            line-height: 1.6;
+        }
+
+        .scale-visualization {
+            margin: 30px 0;
+        }
+
+        .scale-bar {
+            height: 60px;
+            background: linear-gradient(90deg, #00c9ff, #92fe9d);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .scale-indicator {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .comparisons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .comparison-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .comparison-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            33% {
+                transform: translateY(-20px) rotate(120deg);
+            }
+
+            66% {
+                transform: translateY(10px) rotate(240deg);
+            }
+        }
+
+        @keyframes scaleGlow {
+            0% {
+                transform: scaleX(0);
+            }
+
+            100% {
+                transform: scaleX(1);
+            }
+        }
+
+        .scale-animation {
+            animation: scaleGlow 2s ease-in-out;
+            transform-origin: left;
+        }
+
+        .error {
+            color: #ff6b6b;
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .number-name {
+                font-size: 2rem;
+            }
+
+            .comparisons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sized {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🌌 Massive Number Visualizer</h1>
+            <p>Explore the incredible scale of impossibly large numbers</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <div class="input-container">
+                    <input class="sized" type="text" id="numberInput"
+                        placeholder="Enter a large number name (e.g., million, googol, centillion, graham's number)">
+                    <div class="suggestions-dropdown" id="suggestionsDropdown"></div>
+                </div>
+                <button onclick="visualizeNumber()">Visualize</button>
+            </div>
+            <div class="examples">
+                <button class="example-btn" onclick="setExample('googol')">Googol</button>
+                <button class="example-btn" onclick="setExample('googolplex')">Googolplex</button>
+                <button class="example-btn" onclick="setExample('centillion')">Centillion</button>
+                <button class="example-btn" onclick="setExample('millinillion')">Millinillion</button>
+                <button class="example-btn" onclick="setExample('tree(3)')">Tree(3)</button>
+                <button class="example-btn" onclick="setExample('graham\'s number')">Graham's Number</button>
+                <button class="example-btn" onclick="setExample('rayo\'s number')">Rayo's Number</button>
+                <button class="example-btn" onclick="setExample('skewes\' number')">Skewes' Number</button>
+                <button class="example-btn" onclick="setExample('moser\'s number')">Moser's Number</button>
+            </div>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="number-display">
+                <div class="number-name" id="numberName"></div>
+                <div class="number-value" id="numberValue"></div>
+            </div>
+
+            <div class="scale-visualization">
+                <div class="scale-bar scale-animation" id="scaleBar">
+                    <div class="scale-indicator" id="scaleIndicator"></div>
+                </div>
+            </div>
+
+            <div class="comparisons" id="comparisons"></div>
+        </div>
+    </div>
+
+    <script>
+        const numberData = {
+            'hundred': {
+                name: 'Hundred',
+                value: '100',
+                digits: 3,
+                shortScale: 'One hundred',
+                longScale: 'One hundred',
+                comparisons: [
+                    'Seconds in about 1.67 minutes',
+                    'Average human lifespan in years: ~75-80',
+                    'Temperature water boils at (°C)'
+                ]
+            },
+            'thousand': {
+                name: 'Thousand',
+                value: '1,000',
+                digits: 4,
+                shortScale: 'One thousand',
+                longScale: 'One thousand',
+                comparisons: [
+                    'Seconds in about 16.67 minutes',
+                    'Pages in a very thick book',
+                    'Steps in about half a mile'
+                ]
+            },
+            'million': {
+                name: 'Million',
+                value: '1,000,000',
+                digits: 7,
+                shortScale: 'One million',
+                longScale: 'One million',
+                comparisons: [
+                    'Seconds in about 11.6 days',
+                    'Grains of sand in a small handful',
+                    'Pixels in a 1080p display: ~2 million'
+                ]
+            },
+            'billion': {
+                name: 'Billion',
+                value: '1,000,000,000',
+                digits: 10,
+                shortScale: 'One billion (10⁹)',
+                longScale: 'One milliard (10⁹)',
+                comparisons: [
+                    'Seconds in about 31.7 years',
+                    'Stars in a small galaxy',
+                    'Heartbeats in ~25 years of life'
+                ]
+            },
+            'trillion': {
+                name: 'Trillion',
+                value: '1,000,000,000,000',
+                digits: 13,
+                shortScale: 'One trillion (10¹²)',
+                longScale: 'One billion (10¹²)',
+                comparisons: [
+                    'Seconds in about 31,700 years',
+                    'Cells in the human body: ~37 trillion',
+                    'US national debt is measured in trillions'
+                ]
+            },
+            'quadrillion': {
+                name: 'Quadrillion',
+                value: '1,000,000,000,000,000',
+                digits: 16,
+                shortScale: 'One quadrillion (10¹⁵)',
+                longScale: 'One billiard (10¹⁵)',
+                comparisons: [
+                    'Ants on Earth: estimated 20 quadrillion',
+                    'Bytes in 1 petabyte',
+                    'Operations modern computers can do per second'
+                ]
+            },
+            'quintillion': {
+                name: 'Quintillion',
+                value: '1,000,000,000,000,000,000',
+                digits: 19,
+                shortScale: 'One quintillion (10¹⁸)',
+                longScale: 'One trillion (10¹⁸)',
+                comparisons: [
+                    'Grains of sand on all Earth\'s beaches: ~7.5 quintillion',
+                    'Bytes in 1 exabyte',
+                    'Possible chess games after 10 moves'
+                ]
+            },
+
+            'sextillion': {
+                name: 'Sextillion',
+                value: '1,000,000,000,000,000,000,000',
+                digits: 22,
+                shortScale: 'One sextillion (10²¹)',
+                longScale: 'One trilliard (10²¹)',
+                comparisons: [
+                    'Stars in the observable universe: ~1 sextillion',
+                    'Bytes in 1 zettabyte',
+                    'Molecules in a drop of water'
+                ]
+            },
+
+            'septillion': {
+                name: 'Septillion',
+                value: '1,000,000,000,000,000,000,000,000',
+                digits: 25,
+                shortScale: 'One septillion (10²⁴)',
+                longScale: 'One quadrillion (10²⁴)',
+                comparisons: [
+                    'Atoms in a grain of salt',
+                    'Bytes in 1 yottabyte',
+                    'Possible positions in Go game'
+                ]
+            },
+
+            'octillion': {
+                name: 'Octillion',
+                value: '1,000,000,000,000,000,000,000,000,000',
+                digits: 28,
+                shortScale: 'One octillion (10²⁷)',
+                longScale: 'One quadrilliard (10²⁷)',
+                comparisons: [
+                    'Atoms in the human body: ~7 octillion',
+                    'Possible combinations of a Rubik\'s cube',
+                    'Planck volumes in a cubic meter'
+                ]
+            },
+
+            'nonillion': {
+                name: 'Nonillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000',
+                digits: 31,
+                shortScale: 'One nonillion (10³⁰)',
+                longScale: 'One quintillion (10³⁰)',
+                comparisons: [
+                    'Bacterial cells on Earth: estimated 1 nonillion',
+                    'Possible IP addresses in IPv6',
+                    'Maximum theoretical storage of quantum computer'
+                ]
+            },
+            'decillion': {
+                name: 'Decillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 34,
+                shortScale: 'One decillion (10³³)',
+                longScale: 'One quintilliard (10³³)',
+                comparisons: [
+                    'Possible ways to arrange a deck of cards',
+                    'Estimated number of cells in all life on Earth',
+                    'Theoretical maximum Bitcoin addresses'
+                ]
+            },
+
+            'undecillion': {
+                name: 'Undecillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 37,
+                shortScale: 'One undecillion (10³⁶)',
+                longScale: 'One sextillion (10³⁶)',
+                comparisons: [
+                    'Possible configurations of matter in a cubic meter',
+                    'Age of universe in Planck time units',
+                    'Number of ways to fold a protein'
+                ]
+            },
+
+            'duodecillion': {
+                name: 'Duodecillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 40,
+                shortScale: 'One duodecillion (10³⁹)',
+                longScale: 'One sextilliard (10³⁹)',
+                comparisons: [
+                    'Theoretical maximum number of quantum states',
+                    'Possible chess games: ~10⁴⁰',
+                    'Estimated atoms in the observable universe'
+                ]
+            },
+            'tredecillion': {
+                name: 'Tredecillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 43,
+                shortScale: 'One tredecillion (10⁴²)',
+                longScale: 'One septillion (10⁴²)',
+                comparisons: [
+                    'Possible arrangements of 52 playing cards',
+                    'Maximum theoretical passwords with 256-bit encryption',
+                    'Number of possible neural connections in brain'
+                ]
+            },
+
+            'quattuordecillion': {
+                name: 'Quattuordecillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 46,
+                shortScale: 'One quattuordecillion (10⁴⁵)',
+                longScale: 'One septilliard (10⁴⁵)',
+                comparisons: [
+                    'Possible states of a 150-qubit quantum computer',
+                    'Theoretical maximum file combinations',
+                    'Number of ways DNA can be arranged'
+                ]
+            },
+
+            'quindecillion': {
+                name: 'Quindecillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 49,
+                shortScale: 'One quindecillion (10⁴⁸)',
+                longScale: 'One octillion (10⁴⁸)',
+                comparisons: [
+                    'Possible combinations in a 16x16 Sudoku',
+                    'Theoretical limit of secure hash functions',
+                    'Maximum entropy states in thermodynamics'
+                ]
+            },
+
+            'sexdecillion': {
+                name: 'Sexdecillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 52,
+                shortScale: 'One sexdecillion (10⁵¹)',
+                longScale: 'One octilliard (10⁵¹)',
+                comparisons: [
+                    'Possible quantum field configurations',
+                    'Theoretical maximum prime number combinations',
+                    'Number of possible protein folding patterns'
+                ]
+            },
+
+            'septendecillion': {
+                name: 'Septendecillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 55,
+                shortScale: 'One septendecillion (10⁵⁴)',
+                longScale: 'One nonillion (10⁵⁴)',
+                comparisons: [
+                    'Possible arrangements of matter in the universe',
+                    'Theoretical maximum blockchain combinations',
+                    'Number of possible genetic sequences'
+                ]
+            },
+
+            'octodecillion': {
+                name: 'Octodecillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 58,
+                shortScale: 'One octodecillion (10⁵⁷)',
+                longScale: 'One nonilliard (10⁵⁷)',
+                comparisons: [
+                    'Possible states of all particles in a galaxy',
+                    'Maximum theoretical AI neural network nodes',
+                    'Number of possible chemical reactions'
+                ]
+            },
+
+            'novemdecillion': {
+                name: 'Novemdecillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 61,
+                shortScale: 'One novemdecillion (10⁶⁰)',
+                longScale: 'One decillion (10⁶⁰)',
+                comparisons: [
+                    'Possible quantum fluctuations in space',
+                    'Theoretical maximum database entries',
+                    'Number of possible molecular structures'
+                ]
+            },
+
+            'vigintillion': {
+                name: 'Vigintillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 64,
+                shortScale: 'One vigintillion (10⁶³)',
+                longScale: 'One decilliard (10⁶³)',
+                comparisons: [
+                    'Possible configurations of the multiverse',
+                    'Maximum theoretical computing operations',
+                    'Number of possible evolutionary pathways'
+                ]
+            },
+            'unvigintillion': {
+                name: 'Unvigintillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 67,
+                shortScale: 'One unvigintillion (10⁶⁶)',
+                longScale: 'One undecillion (10⁶⁶)',
+                comparisons: [
+                    'Possible states of all quarks in the universe',
+                    'Theoretical maximum parallel universe count',
+                    'Number of possible cosmic string configurations'
+                ]
+            },
+
+            'duovigintillion': {
+                name: 'Duovigintillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 70,
+                shortScale: 'One duovigintillion (10⁶⁹)',
+                longScale: 'One undecilliard (10⁶⁹)',
+                comparisons: [
+                    'Possible quantum vacuum fluctuations',
+                    'Maximum theoretical information storage',
+                    'Number of possible space-time geometries'
+                ]
+            },
+
+            'trevigintillion': {
+                name: 'Trevigintillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 73,
+                shortScale: 'One trevigintillion (10⁷²)',
+                longScale: 'One duodecillion (10⁷²)',
+                comparisons: [
+                    'Possible arrangements of dark matter',
+                    'Theoretical maximum black hole states',
+                    'Number of possible quantum field interactions'
+                ]
+            },
+
+            'quattuorvigintillion': {
+                name: 'Quattuorvigintillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 76,
+                shortScale: 'One quattuorvigintillion (10⁷⁵)',
+                longScale: 'One duodecilliard (10⁷⁵)',
+                comparisons: [
+                    'Possible configurations of cosmic microwave background',
+                    'Maximum theoretical wormhole connections',
+                    'Number of possible gravitational wave patterns'
+                ]
+            },
+
+            'quinvigintillion': {
+                name: 'Quinvigintillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 79,
+                shortScale: 'One quinvigintillion (10⁷⁸)',
+                longScale: 'One tredecillion (10⁷⁸)',
+                comparisons: [
+                    'Possible states of all photons in the universe',
+                    'Theoretical maximum dimension folding patterns',
+                    'Number of possible quantum entanglement networks'
+                ]
+            },
+
+            'sexvigintillion': {
+                name: 'Sexvigintillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 82,
+                shortScale: 'One sexvigintillion (10⁸¹)',
+                longScale: 'One tredecilliard (10⁸¹)',
+                comparisons: [
+                    'Possible arrangements of fundamental forces',
+                    'Maximum theoretical superstring configurations',
+                    'Number of possible brane world geometries'
+                ]
+            },
+
+            'septenvigintillion': {
+                name: 'Septenvigintillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 85,
+                shortScale: 'One septenvigintillion (10⁸⁴)',
+                longScale: 'One quattuordecillion (10⁸⁴)',
+                comparisons: [
+                    'Possible quantum foam configurations at Planck scale',
+                    'Theoretical maximum holographic information',
+                    'Number of possible inflationary universe models'
+                ]
+            },
+
+            'octovigintillion': {
+                name: 'Octovigintillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 88,
+                shortScale: 'One octovigintillion (10⁸⁷)',
+                longScale: 'One quattuordecilliard (10⁸⁷)',
+                comparisons: [
+                    'Possible configurations of the quantum multiverse',
+                    'Maximum theoretical AdS/CFT correspondence states',
+                    'Number of possible M-theory compactifications'
+                ]
+            },
+
+            'novemvigintillion': {
+                name: 'Novemvigintillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 91,
+                shortScale: 'One novemvigintillion (10⁹⁰)',
+                longScale: 'One quindecillion (10⁹⁰)',
+                comparisons: [
+                    'Possible states of all information in the cosmos',
+                    'Theoretical maximum loop quantum gravity nodes',
+                    'Number of possible causal diamond configurations'
+                ]
+            },
+
+            'trigintillion': {
+                name: 'Trigintillion',
+                value: '1,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000,000',
+                digits: 94,
+                shortScale: 'One trigintillion (10⁹³)',
+                longScale: 'One quindecilliard (10⁹³)',
+                comparisons: [
+                    'Possible arrangements of reality at the deepest level',
+                    'Maximum theoretical consciousness states',
+                    'Number of possible fundamental physics theories'
+                ]
+            },
+            'centillion': {
+                name: 'Centillion',
+                value: '10^303 (Short Scale) / 10^600 (Long Scale)',
+                digits: 304,
+                shortScale: 'One centillion (10³⁰³)',
+                longScale: 'One centillion (10⁶⁰⁰)',
+                comparisons: [
+                    'Vastly exceeds atoms in observable universe (~10⁸²)',
+                    'Contains about 10²²¹ googols (short scale)',
+                    'Even light-years seem tiny compared to this'
+                ]
+            },
+            'millinillion': {
+                name: 'Millinillion',
+                value: '10^3003 (Short Scale) / 10^6000 (Long Scale)',
+                digits: 3004,
+                shortScale: 'One millinillion (10³⁰⁰³)',
+                longScale: 'One millinillion (10⁶⁰⁰⁰)',
+                comparisons: [
+                    'Contains about 10²⁹²¹ googols (short scale)',
+                    'Could contain 10²⁹²¹ entire observable universes worth of atoms',
+                    'Number of possible chess games seems microscopic'
+                ]
+            },
+            'googol': {
+                name: 'Googol',
+                value: '10^100 = 1 followed by 100 zeros',
+                digits: 101,
+                shortScale: 'One googol (10¹⁰⁰)',
+                longScale: 'One googol (10¹⁰⁰)',
+                comparisons: [
+                    'Atoms in observable universe: ~10⁸²',
+                    'A googol is 10¹⁸ times larger than atoms in universe',
+                    'Impossible to write out completely - would need more space than exists'
+                ]
+            },
+            'googolplex': {
+                name: 'Googolplex',
+                value: '10^googol = 10^(10^100)',
+                digits: 'Googol + 1',
+                shortScale: 'One googolplex',
+                longScale: 'One googolplex',
+                comparisons: [
+                    'Impossible to write - would need 10^googol pencils',
+                    'Contains 10^(googol-100) googols',
+                    'Even if every atom in universe was ink, couldn\'t write it'
+                ]
+            },
+            'tree(3)': {
+                name: 'TREE(3)',
+                value: 'Unimaginably vast - grows faster than any primitive recursive function',
+                digits: 'Incomprehensibly large',
+                shortScale: 'Beyond conventional notation',
+                longScale: 'Beyond conventional notation',
+                comparisons: [
+                    'Makes googolplex look like 0 in comparison',
+                    'Graham\'s number is tiny compared to TREE(3)',
+                    'Cannot be expressed using normal mathematical notation'
+                ]
+            },
+            'googolduplex': {
+                name: 'Googolduplex',
+                value: '10^googolplex = 10^(10^(10^100))',
+                digits: 'Unwritable and incalculable',
+                shortScale: 'One googolduplex',
+                longScale: 'One googolduplex',
+                comparisons: [
+                    'Exponentially beyond googolplex',
+                    'Cannot be stored in the universe—even in principle',
+                    'Thought experiment only—too big to compute anything meaningful from it'
+                ]
+            },
+            'skewes\' number': {
+                name: 'Skewes\' Number',
+                value: 'First estimate: ~10^(10^10^34)',
+                digits: 'Depends on version',
+                shortScale: 'Skewes\' Number',
+                longScale: 'Skewes\' Number',
+                comparisons: [
+                    'Once held the record for largest number used in serious math',
+                    'Related to the distribution of prime numbers',
+                    'Smaller than Graham’s number, but still hyper-astronomical'
+                ]
+            },
+            'rayo\'s number': {
+                name: 'Rayo\'s Number',
+                value: 'Largest named number in a formal logical system',
+                digits: 'Inexpressible',
+                shortScale: 'Rayo’s number (Rayo(10^100))',
+                longScale: 'Rayo’s number (Rayo(10^100))',
+                comparisons: [
+                    'Created to win a "largest number contest"',
+                    'So large it surpasses TREE(3), Graham’s number, and more',
+                    'Defined by a complex self-referential logical description'
+                ]
+            },
+            'busy beaver (BB(100))': {
+                name: 'Busy Beaver (BB(100))',
+                value: 'Uncomputable; grows faster than any computable function',
+                digits: 'Unknown',
+                shortScale: 'Busy Beaver function for 100-state Turing machine',
+                longScale: 'Busy Beaver function for 100-state Turing machine',
+                comparisons: [
+                    'BB(4) = 107; BB(100) is incomprehensibly huge',
+                    'Grows faster than exponential, factorial, and most known functions',
+                    'Used to explore limits of computation and provability'
+                ]
+            },
+            'moser\'s number': {
+                name: 'Moser’s Number',
+                value: 'Written using the "Mega" function in Steinhaus–Moser notation',
+                digits: 'Far beyond Graham’s number',
+                shortScale: 'Moser’s number',
+                longScale: 'Moser’s number',
+                comparisons: [
+                    'Defined using a triangle of exponent towers',
+                    'Moser’s number is larger than a megagon written in the Mega notation',
+                    'Bigger than most large named numbers except Rayo’s and TREE(3)'
+                ]
+            },
+            'graham\'s number': {
+                name: 'Graham\'s Number',
+                value: 'G₆₄ in Knuth up-arrow notation',
+                digits: 'Uncomputable in normal terms',
+                shortScale: 'Beyond standard notation',
+                longScale: 'Beyond standard notation',
+                comparisons: [
+                    'Googolplex^googolplex^... (repeated googolplex times) is still 0 compared to this',
+                    'Last digits are ...2464195387',
+                    'Upper bound for a problem in Ramsey theory'
+                ]
+            }
+        };
+
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particles.appendChild(particle);
+            }
+        }
+
+        function setExample(example) {
+            document.getElementById('numberInput').value = example;
+            visualizeNumber();
+        }
+
+        function visualizeNumber() {
+            const input = document.getElementById('numberInput').value.toLowerCase().trim();
+            const resultSection = document.getElementById('resultSection');
+
+            if (!input) return;
+
+            const data = numberData[input];
+
+            if (!data) {
+                showError('Number not found. Try: googol, centillion, millinillion, tree(3), graham\'s number');
+                return;
+            }
+
+            // Show result section
+            resultSection.classList.add('show');
+
+            // Update display
+            document.getElementById('numberName').textContent = data.name;
+            document.getElementById('numberValue').textContent = data.value;
+
+            // Update scale indicator
+            const scaleBar = document.getElementById('scaleBar');
+            const scaleIndicator = document.getElementById('scaleIndicator');
+
+            let scaleText = '';
+            if (typeof data.digits === 'number') {
+                if (data.digits <= 10) scaleText = 'Human Scale';
+                else if (data.digits <= 20) scaleText = 'Astronomical';
+                else if (data.digits <= 100) scaleText = 'Cosmic';
+                else if (data.digits <= 1000) scaleText = 'Incomprehensible';
+                else scaleText = 'Beyond Reality';
+            } else {
+                scaleText = 'Transcendent';
+            }
+
+            scaleIndicator.textContent = scaleText;
+
+            // Reset and animate scale bar
+            scaleBar.style.animation = 'none';
+            setTimeout(() => {
+                scaleBar.style.animation = 'scaleGlow 2s ease-in-out';
+            }, 100);
+
+            // Update comparisons
+            updateComparisons(data);
+        }
+
+        function updateComparisons(data) {
+            const comparisons = document.getElementById('comparisons');
+            comparisons.innerHTML = '';
+
+            // Scale comparison
+            const scaleCard = document.createElement('div');
+            scaleCard.className = 'comparison-card';
+            scaleCard.innerHTML = `
+                <div class="comparison-title">📏 Scale Notation</div>
+                <p><strong>Short Scale:</strong> ${data.shortScale}</p>
+                <p><strong>Long Scale:</strong> ${data.longScale}</p>
+            `;
+            comparisons.appendChild(scaleCard);
+
+            // Add comparison cards
+            data.comparisons.forEach((comparison, index) => {
+                const card = document.createElement('div');
+                card.className = 'comparison-card';
+                card.style.animationDelay = (index * 0.2) + 's';
+
+                const icons = ['🌟', '🌍', '⚡', '🔬', '🚀', '💫'];
+                card.innerHTML = `
+                    <div class="comparison-title">${icons[index % icons.length]} Reality Check</div>
+                    <p>${comparison}</p>
+                `;
+                comparisons.appendChild(card);
+            });
+
+            // Special comparisons for very large numbers
+            if (['googol', 'googolplex', 'centillion', 'millinillion'].includes(document.getElementById('numberInput').value.toLowerCase())) {
+                const specialCard = document.createElement('div');
+                specialCard.className = 'comparison-card';
+                specialCard.innerHTML = `
+                    <div class="comparison-title">🎯 Put It In Perspective</div>
+                    <p>If you wrote one digit per second, it would take longer than the age of the universe to write this number!</p>
+                `;
+                comparisons.appendChild(specialCard);
+            }
+        }
+
+        function showError(message) {
+            const resultSection = document.getElementById('resultSection');
+            resultSection.innerHTML = `<div class="error">${message}</div>`;
+            resultSection.classList.add('show');
+        }
+        // Predictive search functionality
+        let currentSuggestionIndex = -1;
+        let filteredSuggestions = [];
+
+        function initializePredictiveSearch() {
+            const input = document.getElementById('numberInput');
+            const dropdown = document.getElementById('suggestionsDropdown');
+
+            input.addEventListener('input', handleInput);
+            input.addEventListener('keydown', handleKeydown);
+            input.addEventListener('blur', () => {
+                // Delay hiding to allow clicks on suggestions
+                setTimeout(() => hideSuggestions(), 150);
+            });
+            input.addEventListener('focus', handleInput);
+        }
+
+        function handleInput(e) {
+            const query = e.target.value.toLowerCase().trim();
+
+            if (query.length === 0) {
+                hideSuggestions();
+                return;
+            }
+
+            // Filter suggestions
+            filteredSuggestions = Object.keys(numberData).filter(key => {
+                const name = numberData[key].name.toLowerCase();
+                return name.includes(query) || key.includes(query);
+            }).slice(0, 8); // Limit to 8 suggestions
+
+            if (filteredSuggestions.length > 0) {
+                showSuggestions(query);
+            } else {
+                hideSuggestions();
+            }
+        }
+
+        function handleKeydown(e) {
+            const dropdown = document.getElementById('suggestionsDropdown');
+
+            if (!dropdown.classList.contains('show')) return;
+
+            switch (e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    currentSuggestionIndex = Math.min(currentSuggestionIndex + 1, filteredSuggestions.length - 1);
+                    highlightSuggestion();
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    currentSuggestionIndex = Math.max(currentSuggestionIndex - 1, -1);
+                    highlightSuggestion();
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    if (currentSuggestionIndex >= 0) {
+                        selectSuggestion(filteredSuggestions[currentSuggestionIndex]);
+                    } else {
+                        visualizeNumber();
+                    }
+                    break;
+                case 'Escape':
+                    hideSuggestions();
+                    break;
+            }
+        }
+
+        function showSuggestions(query) {
+            const dropdown = document.getElementById('suggestionsDropdown');
+            dropdown.innerHTML = '';
+            currentSuggestionIndex = -1;
+
+            filteredSuggestions.forEach((key, index) => {
+                const data = numberData[key];
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.onclick = () => selectSuggestion(key);
+
+                // Highlight matching text
+                const displayName = data.name;
+                const highlightedName = highlightMatch(displayName, query);
+
+                item.innerHTML = `
+            <div>
+                <div class="suggestion-name">${highlightedName}</div>
+                <div class="suggestion-preview">${getPreview(data)}</div>
+            </div>
+        `;
+
+                dropdown.appendChild(item);
+            });
+
+            dropdown.classList.add('show');
+        }
+
+        function highlightMatch(text, query) {
+            if (!query) return text;
+
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="suggestion-match">$1</span>');
+        }
+
+        function getPreview(data) {
+            if (typeof data.digits === 'number') {
+                return `${data.digits} digits`;
+            } else {
+                return data.digits;
+            }
+        }
+
+        function highlightSuggestion() {
+            const items = document.querySelectorAll('.suggestion-item');
+            items.forEach((item, index) => {
+                item.classList.toggle('highlighted', index === currentSuggestionIndex);
+            });
+        }
+
+        function selectSuggestion(key) {
+            document.getElementById('numberInput').value = numberData[key].name;
+            hideSuggestions();
+            visualizeNumber();
+        }
+
+        function hideSuggestions() {
+            const dropdown = document.getElementById('suggestionsDropdown');
+            dropdown.classList.remove('show');
+            currentSuggestionIndex = -1;
+        }
+        // Initialize
+        createParticles();
+        initializePredictiveSearch();
+
+        // Enter key support
+        document.getElementById('numberInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                visualizeNumber();
+            }
+        });
+    </script>
+</body>
+
+</html>
